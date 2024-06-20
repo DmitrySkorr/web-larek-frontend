@@ -1,6 +1,6 @@
 import { Form } from './Form';
-import { IOrder } from '../types';
-import { IEvents } from '../components/base/events';
+import { IOrder } from '../../types/index';
+import { IEvents } from '../base/events';
 
 // Класс заказа, наследуется от Form
 export class Order extends Form<IOrder> {
@@ -24,8 +24,8 @@ export class Order extends Form<IOrder> {
 
   // Обработчик клика по альтернативной кнопке
   private _handleAltButtonClick(button: HTMLButtonElement): void {
-    this._altButtons.forEach(btn => btn.classList.remove('button_alt-active'));
-    button.classList.add('button_alt-active');
+    this._altButtons.forEach(btn => this.toggleClass(btn, 'button_alt-active', false));
+    this.toggleClass(button, 'button_alt-active', true);
     this.payment = button.name;
   }
 

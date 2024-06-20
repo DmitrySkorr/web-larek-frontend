@@ -1,5 +1,5 @@
-import { ensureElement } from '../utils/utils'; // Импорт утилиты для гарантированного получения элемента DOM
-import { Component } from '../components/base/Component'; // Импорт базового класса компонента
+import { ensureElement } from '../../utils/utils'; // Импорт утилиты для гарантированного получения элемента DOM
+import { Component } from '../base/Component'; // Импорт базового класса компонента
 
 interface IProductActions {
 	// Интерфейс для действий с продуктом, включает обработчик клика
@@ -92,11 +92,11 @@ export class Product<T> extends Component<IProduct<T>> {
 
 	// Сеттер и геттер для цены продукта
 	set price(value: string | null) {
-		this.setText(this._price, value ?? '');
+		this.setText(this._price, value + ' синапсов' ?? '');
 	}
 
 	get price(): string {
-		return this._price.textContent || '';
+		return this._price.textContent + ' синапсов' || '';
 	}
 
 	// Сеттер для изображения продукта

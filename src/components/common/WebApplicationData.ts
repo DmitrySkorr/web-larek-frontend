@@ -1,5 +1,5 @@
-import { Model } from '../components/base/Model';
-import { FormErrors, IOrder } from '../types/index';
+import { Model } from '../base/Model';
+import { FormErrors, IOrder } from '../../types/index';
 
 // Интерфейс продукта
 export interface IProduct {
@@ -70,8 +70,8 @@ export class AppState extends Model<AppState> {
   // Общая стоимость корзины
   getTotalPrice() {
     return this.basket.reduce(
-      (total, id) => total + this.catalog.find(item => item.id === id).price,
-      0
+      (total, id) => total + this.catalog.find(item => item.id === id).price, 0
+    
     );
   }
 

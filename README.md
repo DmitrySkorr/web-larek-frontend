@@ -11,7 +11,7 @@
 - src/pages/index.html — HTML-файл главной страницы
 - src/types/index.ts — файл с типами
 - src/index.ts — точка входа приложения
-- src/styles/styles.scss — корневой файл стилей
+- src/scss/styles.scss — корневой файл стилей
 - src/utils/constants.ts — файл с константами
 - src/utils/utils.ts — файл с утилитами
 
@@ -61,70 +61,215 @@ src/components/base/ — папка с базовым кодом
 архитектура:
 web-larek создан по принципу ооп с использованием mvp архитектуры (model - view - presenter)
 
-класс api отвечает за создание fetch запросов (методы get и post), handleResponse для бработки ответа сервера
+Компоненты и модели данных (бизнес-логика)
 
-класс Component отвечает за управление компонентами
-методы setText, setImage, toggleClass для изменения состояния элементов
-render для заполнения свойств элемента
+Класс Component
 
-класс EventEmitter Брокер событий
-методы jn off emit - подписка отписка уведомление
-onAll ofAll - подписка на все события и сброс всех событий
-trigger - Сделать коллбек триггер, генерирующий событие при вызове
+Абстрактный базовый класс для компонентов интерфейса, предоставляющий методы управления ими, включая изменение текста, изображений, переключение классов и рендеринг. Класс является дженериком, принимающим тип данных компонентов через переменную T.
 
-класс Model - Базовая модель, чтобы можно было отличить ее от простых объектов с данными
-метод emitChanges - Сообщить всем что модель поменялась
+Конструктор: принимает элемент, с которым будет происходить взаимодействие.
+Методы:
+setText: изменение текста элемента.
+setImage: изменение изображения элемента.
+toggleClass: переключение класса элемента.
+render: заполнение свойств элемента и получение его в формате HTMLElement.
 
-бизнес логика
+Класс Model
 
-класс AppState - Состояние приложения
-методы 
-addProductInBasket Добавление продукта в корзину
-removeProductFromBasket Удаление продукта из корзины
-getBasket Получение продуктов в корзине
-setPreview Установка превью продукта
-setCatalog Установка каталога
-getTotalPrice Общая стоимость корзины
-clearBasket Очистка корзины
-setOrderField Установка поля заказа
-validateOrder Валидация заказа
-clearOrder Очистка заказа
+Абстрактный класс для отличия компонентов от обычных объектов с данными, предоставляющий методы отслеживания изменений. Конструктор принимает компонент для отслеживания.
 
-представление 
+Методы:
+emitChanges: уведомление об изменении модели.
+Класс EventEmitter
 
-класс Basket Класс для управления корзиной, наследует базовый компонент
-методы 
-items - Установка списка элементов в корзине
-total - Установка общей стоимости в корзине
+Реализует паттерн "Наблюдатель", позволяя подписываться на события и уведомлять подписчиков. Методы:
 
-класс Form Класс для работы с формой, наследует базовый компонент
-основные методы 
-valid - Установка валидности формы
-errors - Установка ошибок формы
-render - Метод рендеринга состояния формы
+on: подписка на событие.
+off: отписка от события.
+emit: уведомление подписчиков о событии.
+onAll: подписка на все события.
+offAll: сброс всех подписчиков.
+trigger: генерация события с заданными аргументами для использования в других классах без прямой зависимости от EventEmitter.
 
-класс Modal Класс модального окна, наследуется от базового компонента
-основные методы
-open - Метод для закрытия модального окна.
-close - Метод для закрытия модального окна.
-render - од для рендеринга модального окна с данными.
+Класс AppState
 
-класс Order Класс заказа, наследуется от Form
-основные методы
-phone - номер телефона заказчика
-email - электронная почта заказчика
-address - физический адрес заказчика
-payment - выбранный способ оплаты заказчиком
+Управляет состоянием всего приложения (корзина, заказ, главная страница). Методы:
 
-класс Page наследуктся от базового компонента
-основные методы
-counter - Сеттер для счетчика
-catalog - Сеттер для каталога
-locked - Сеттер для блокировки страницы
+addProductInBasket: добавить товар в корзину.
+removeProductFromBasket: удалить товар из корзины.
+getBasket: получить список товаров.
+setPreview: установить превью товара.
+setCatalog: установить товары в каталог.
+getTotalPrice: получить стоимость всех товаров из корзины.
+clearBasket: очистить корзину.
+setOrderField: установить значения поля заказа.
+validateOrder: валидация полей заказа.
+clearOrder: очистить поля заказа.
+Компоненты представления
 
-класс Product наследуется от базового компонента - шаблон пролукта
-основные методы
+Класс Basket
 
-класс Success наследуется от базового компонента
-отоброжение результата заказа
+Наследуется от абстрактного класса Component. Отображает корзину в контейнере. Конструктор принимает HTMLElement (шаблон корзины) и EventEmitter.
 
+Свойства:
+items: список товаров в корзине.
+total: общая стоимость товаров в корзине.
+
+Класс Modal
+
+Наследуется от абстрактного класса Component. Отображает модальное окно. Конструктор принимает HTMLElement (контент модального окна) и EventEmitter.
+
+Свойства и методы:
+content: компонент, отображаемый в модальном окне.
+open(): открыть модальное окно.
+close(): закрыть модальное окно.
+render(): отобразить модальное окно в компоненте.
+
+Класс Page
+
+Наследуется от абстрактного класса Component. Отображает главную страницу приложения. Конструктор принимает HTMLElement (body) и EventEmitter.
+
+Свойства и методы:
+counter: счетчик товаров в корзине.
+catalog: каталог с карточками товаров.
+locked: состояние блокировки прокрутки страницы.
+
+Класс Product
+
+Абстрактный класс, наследуемый от абстрактного класса Component. Шаблон продукта для управления и отображения. Конструктор принимает имя стиля компонента, контейнер шаблона (HTMLElement) и функции действия при нажатии кнопки.
+
+Свойства:
+id: уникальный идентификатор продукта.
+title: название продукта.
+category: категория продукта.
+price: цена продукта.
+image: ссылка на изображение продукта.
+description: описание продукта.
+
+Класс BasketItem
+
+Наследуется от Product для отображения товаров в корзине. Ключевой метод index — для нумерации продуктов в корзине. Конструктор принимает имя стиля компонента, контейнер шаблона (HTMLElement) и функции действия при нажатии кнопки.
+
+Класс Order
+
+Наследуется от абстрактного класса Form. Отображает заказ в контейнере и управляет им. Конструктор принимает HTMLElement (шаблон страницы заказа) и функции действия на кнопку. Реагирует на изменение кнопок со стилем button_alt.
+
+Свойства и методы:
+phone: номер телефона заказчика.
+email: электронная почта заказчика.
+address: физический адрес заказчика.
+payment: выбранный способ оплаты.
+
+Класс Success
+
+Наследуется от абстрактного класса Component. Отображает результат выполнения заказа. Конструктор принимает HTMLElement (шаблон окна результата) и функции действия кнопки.
+
+Свойства:
+title: заголовок окна.
+description: описание результата.
+
+Класс Form
+
+Абстрактный класс, наследуемый от Component для создания формы, её отображения и управления. Конструктор принимает HTMLFormElement и EventEmitter.
+
+Свойства и методы:
+valid: переключатель доступности кнопки submit.
+errors: ошибки валидации формы.
+render(): отображение формы в контейнере.
+onInputChange(): реакция на изменение инпутов формы.
+
+описание интерфейсов и типов
+
+export type ApiListResponse<Type> = {
+    total: number,
+    items: Type[]
+};
+
+export type ApiPostMethods = 'POST' | 'PUT' | 'DELETE';
+
+export interface IEvents {
+	on<T extends object>(event: EventName, callback: (data: T) => void): void;
+	emit<T extends object>(event: string, data?: T): void;
+	trigger<T extends object>(
+		event: string,
+		context?: Partial<T>
+	): (data: T) => void;
+}
+
+interface IBasketView {
+  items: HTMLElement[];
+  total: number;
+}
+interface IFormState {
+  valid: boolean;
+  errors: string[];
+}
+interface IModalData {
+	content: HTMLElement;
+}
+interface IPage {
+  counter: number;
+  catalog: HTMLElement[];
+  locked: boolean;
+}
+export interface IProduct<T> {
+	index: number;
+	title: string;
+	description: string;
+	price: string;
+	image: string;
+	category: string;
+	status: T;
+}
+interface ISuccess {
+	title: string;
+	description: string;
+}
+export interface IProduct {
+  id: string;
+  title: string;
+  price: number;
+  description: string;
+  image: string;
+  category: string;
+  status: boolean;
+}
+export type CatalogChangeEvent = {
+  catalog: IProduct[];
+};
+export type FormErrors = Partial<Record<keyof IOrder, string>>;
+
+export interface IOrderResult {
+	id: string[];
+	total: number;
+	error?: string;
+}
+
+export interface IProduct {
+	id: string;
+	title: string;
+	image: string;
+	price: number | null;
+	description: string;
+	category: string;
+}
+
+export interface IProducts {
+	total: number;
+	items: IProduct[];
+}
+
+export interface IOrder {
+	payment: string;
+	email: string;
+	phone: string;
+	address: string;
+	total: number;
+	items: string[];
+}
+
+export interface IWebLakerApi {
+	getProducts: () => Promise<IProducts>;
+	getProduct: (id: string) => Promise<IProduct>;
+	createOrder: (order: IOrder) => Promise<IOrderResult>;
+}

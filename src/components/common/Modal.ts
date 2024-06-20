@@ -1,7 +1,7 @@
 // Импорт базового компонента и вспомогательных функций.
-import { Component } from '../components/base/Component';
-import { ensureElement } from '../utils/utils';
-import { IEvents } from '../components/base/events';
+import { Component } from '../base/Component';
+import { ensureElement } from '../../utils/utils';
+import { IEvents } from '../base/events';
 
 // Интерфейс для данных модального окна.
 interface IModalData {
@@ -37,13 +37,14 @@ export class Modal extends Component<IModalData> {
 
 	// Метод для открытия модального окна.
 	open() {
-		this.container.classList.add('modal_active'); // Добавление класса для отображения модального окна.
+		this.toggleClass(this.container, 'modal_active', true);
+		//this.container.classList.add('modal_active'); // Добавление класса для отображения модального окна.
 		this.events.emit('modal:open'); // Вызов события открытия модального окна.
 	}
 
 	// Метод для закрытия модального окна.
 	close() {
-		this.container.classList.remove('modal_active'); // Удаление класса отображения.
+		this.toggleClass(this.container, 'modal_active', false);// Удаление класса отображения.
 		this.content = null; // Очистка содержимого.
 		this.events.emit('modal:close'); // Вызов события закрытия модального окна.
 	}

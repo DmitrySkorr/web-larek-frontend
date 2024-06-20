@@ -1,6 +1,6 @@
-import { IEvents } from './../components/base/events';
-import { Component } from "../components/base/Component";
-import { createElement, ensureElement } from "../utils/utils";
+import { IEvents } from '../base/events';
+import { Component } from "../base/Component";
+import { createElement, ensureElement } from "../../utils/utils";
 
 // Интерфейс для представления корзины
 interface IBasketView {
@@ -34,7 +34,8 @@ export class Basket extends Component<IBasketView> {
   set items(items: HTMLElement[]) {
     if (items.length) {
       this._list.replaceChildren(...items);
-      this._button.disabled = false;
+      this.setDisabled(this._button, false);
+      //this._button.disabled = false;
     } else {
       this._list.replaceChildren(
         createElement<HTMLParagraphElement>('p', {
@@ -50,3 +51,4 @@ export class Basket extends Component<IBasketView> {
     this.setText(this._total, `${total} синапсов`);
   }
 }
+

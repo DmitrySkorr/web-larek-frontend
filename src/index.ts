@@ -1,19 +1,18 @@
 // Импорт стилей
-import './scss/styles.scss';
-
+import '../src/scss/styles.scss';
 // Импорт модулей и констант
-import WebLarekApi from './common/WebApi';
+import WebLarekApi from './components/common/WebApi';
 import { API_URL, CDN_URL } from './utils/constants';
 import { IOrder } from './types';
 import { cloneTemplate, createElement, ensureElement } from './utils/utils';
-import { AppState, CatalogChangeEvent, IProduct } from './common/WebApplicationData';
-import { Page } from './common/PageChecked';
-import { Modal } from './common/Modal';
-import { Basket } from './common/Basket';
-import { Order } from './common/OrderChecked';
+import { AppState, CatalogChangeEvent, IProduct } from './components/common/WebApplicationData';
+import { Page } from './components/common/PageChecked';
+import { Modal } from './components/common/Modal';
+import { Basket } from './components/common/Basket';
+import { Order } from './components/common/OrderChecked';
 import EventEmitter from './components/base/events';
-import { BasketItem, CatalogItem } from './common/ProductChecked';
-import { Success } from './common/Success';
+import { BasketItem, CatalogItem } from './components/common/ProductChecked';
+import { Success } from './components/common/Success';
 
 // Создание экземпляра API
 const api = new WebLarekApi(API_URL);
@@ -22,10 +21,10 @@ const api = new WebLarekApi(API_URL);
 EventEmitter.onAll(({ eventName, data }) => {
 	console.log(eventName, data);
 });
-
+const successOrderTemplate = ensureElement<HTMLTemplateElement>('#success');
 // Шаблоны
 const templates = {
-	success: ensureElement<HTMLTemplateElement>('#success'),
+	//success: ensureElement<HTMLTemplateElement>('#success'),
 	catalogCard: ensureElement<HTMLTemplateElement>('#card-catalog'),
 	previewCard: ensureElement<HTMLTemplateElement>('#card-preview'),
 	basketCard: ensureElement<HTMLTemplateElement>('#card-basket'),
@@ -51,7 +50,7 @@ EventEmitter.on<CatalogChangeEvent>('items:changed', () => {
 			title: item.title,
 			image: CDN_URL + item.image,
 			description: item.description,
-			price: item.price !== null ? `${item.price} синапсов` : '',
+			price: item.price !== null ? `${item.price}` : '',
 			category: item.category,
 		});
 	});
@@ -74,7 +73,7 @@ EventEmitter.on('product:changed-preview', (item: IProduct) => {
 			image: CDN_URL + item.image,
 			description: item.description,
 			category: item.category,
-			price: item.price !== null ? `${item.price} синапсов` : '',
+			price: item.price !== null ? `${item.price}` : '',
 			status: {
 				status: item.price === null || appData.basket.includes(item.id),
 			},
@@ -127,7 +126,7 @@ EventEmitter.on(/(^order|^contacts):submit/, () => {
 		total: appData.getTotalPrice(),
 	})
 	.then((result) => {
-		const success = new Success(cloneTemplate(templates.success), {
+		const success = new Success(cloneTemplate(successOrderTemplate), {
 			onClick: () => {
 				modal.close();
 				EventEmitter.emit('clear:order');
@@ -135,14 +134,16 @@ EventEmitter.on(/(^order|^contacts):submit/, () => {
 		});
 		modal.render({
 			content: success.render({
-				title: !result.error ? 'Заказ оформлен' : 'Ошибка оформления заказа',
-				description: !result.error ? `Списано ${result.total} синапсов` : result.error,
+				title: 'Заказ оформлен',
+				description: `Списано ${result.total} синапсов`,
 			}),
 		});
+		EventEmitter.emit( 'clear:order');
+
 	})
 	.catch(console.error)
 	.finally(() => {
-		EventEmitter.emit( 'clear:order');
+		//EventEmitter.emit( 'clear:order');
 	});
 });
 

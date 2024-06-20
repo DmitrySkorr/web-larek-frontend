@@ -1,6 +1,6 @@
-import { Component } from '../components/base/Component';
-import { IEvents } from '../components/base/events';
-import { ensureElement } from '../utils/utils';
+import { Component } from '../base/Component';
+import { IEvents } from '../base/events';
+import { ensureElement } from '../../utils/utils';
 
 // Интерфейс для страницы
 interface IPage {
@@ -52,7 +52,7 @@ export class Page extends Component<IPage> {
 
   // Сеттер для блокировки страницы
   set locked(value: boolean) {
-    this._toggleClass(this._wrapper, 'page__wrapper_locked', value);
+    this.toggleClass(this._wrapper, 'page__wrapper_locked', value);
   }
 
   // Метод для установки текста элемента
@@ -61,11 +61,5 @@ export class Page extends Component<IPage> {
   }
 
   // Метод для добавления/удаления класса в зависимости от условия
-  private _toggleClass(element: HTMLElement, className: string, add: boolean): void {
-    if (add) {
-      element.classList.add(className);
-    } else {
-      element.classList.remove(className);
-    }
-  }
+  
 }

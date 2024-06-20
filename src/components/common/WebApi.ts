@@ -1,5 +1,5 @@
-import { Api } from '../components/base/api';
-import { IWebLakerApi, IProducts, IOrderResult, IProduct, IOrder } from '../types/index';
+import { Api } from '../base/api';
+import { IWebLakerApi, IProducts, IOrderResult, IProduct, IOrder } from '../../types/index';
 
 export default class WebLarekApi extends Api implements IWebLakerApi {
   constructor(baseUrl: string, options?: RequestInit) {
