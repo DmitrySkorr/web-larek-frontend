@@ -81,7 +81,7 @@ export class Product<T> extends Component<IProduct<T>> {
 		if (this._category) {
 			this.setText(this._category, value);
 			const categoryStyle = `card__category_${ProductCategory[value]}`;
-			this._category.classList.add(categoryStyle);
+			this.toggleClass(this._category, categoryStyle, true);
 		}
 	}
 

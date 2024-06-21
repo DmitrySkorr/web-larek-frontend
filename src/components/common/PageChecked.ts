@@ -41,7 +41,7 @@ export class Page extends Component<IPage> {
 
   // Сеттер для счетчика
   set counter(value: number) {
-    this._setText(this._counter, value.toString());
+    this.setText(this._counter, value.toString());
   }
 
   // Сеттер для каталога
@@ -55,10 +55,7 @@ export class Page extends Component<IPage> {
     this.toggleClass(this._wrapper, 'page__wrapper_locked', value);
   }
 
-  // Метод для установки текста элемента
-  private _setText(element: HTMLElement, text: string): void {
-    element.textContent = text;
-  }
+
 
   // Метод для добавления/удаления класса в зависимости от условия
   
